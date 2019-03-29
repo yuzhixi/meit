@@ -1,22 +1,29 @@
 <template>
-  <el-row :gutter="15" class="m-header">
-    <el-col :span="6">
-      <geo/>
-    </el-col>
-    <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-    <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-  </el-row>
+  <div class="m-header">
+    <el-row>
+      <el-col>
+        <topBar/>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col>
+        <searchBar/>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 <script>
-import Geo from './geo.vue'
+import topBar from "./topbar.vue"
+import searchBar from "./searchbar.vue"
 export default {
   components:{
-    Geo
+    topBar,
+    searchBar
   }
 }
 </script>
 <style lang="scss">
-  @import "assets/css/public/layout.scss";
+@import "assets/css/public/header/index.scss";
 </style>
 
 
