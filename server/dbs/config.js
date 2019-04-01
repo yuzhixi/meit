@@ -21,18 +21,19 @@ export default {
         //生成授权码
         get pass(){
             return 'pljdmbpnorlfbdfd'
+        },
+         //设置4位验证码
+        get code(){
+          return ()=>{
+              return Math.random().toString(16).slice(2,6).toUpperCase()
+          }
+        },
+        //设置验证码过期时间位1分钟
+        get expire(){
+            return ()=>{
+                return new Date().getTime+60*60*1000
+            }
         }
     },
-    //设置4位验证码
-    get code(){
-        return ()=>{
-            return Math.random().toString(16).slice(2,6).toUpperCase()
-        }
-    },
-    //设置验证码过期时间位1分钟
-    get expire(){
-        return ()=>{
-            return new Date().getTime+60*60*1000
-        }
-    }
+
 }

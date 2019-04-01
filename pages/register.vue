@@ -41,7 +41,7 @@
                 <el-form-item>
                     <a class="f1" href="http://www.meituan.com/about/terms" target="_blank">《美团网用户协议》</a>
                 </el-form-item>
-               
+
             </el-form>
         </section>
 
@@ -95,7 +95,38 @@ export default {
     },
     methods:{
         sendMsg(){
+          const self = this;
+          let namePass
+          let emailPass
+          if (self.timerid) {
+            return false
+          }
+          this.$refs['form'].validateField('name', (valid) => {
+            namePass = valid
+          })
 
+          if ( !namePass && !emailPass ) {
+            self.$axios.post('/users/verify', {
+              username:encodeURIComponent(self.form.name),
+              email:self.form.email
+            }).then(({
+              status,
+              data
+            }) => {
+              if ( status === 200 && data && data.code === 0) {
+                let count = 60;
+                self.statusMsg = `验证码已发送，剩余${count--}秒`
+                self.timerid = setInterval(function(){
+                  self.statusMsg = `验证码已发送，剩余${count--}秒`
+                  if (count === 0 ){
+                    clearInterval(self.timerid)
+                  }
+                },1000)
+              } else{
+                self.statusMsg = data.msg
+              }
+            })
+          }
         },
         register(){
 
