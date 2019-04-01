@@ -21,7 +21,7 @@
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="form.emial"></el-input>
+                    <el-input v-model="form.email"></el-input>
                     <el-button size="mini" round @click="sendMsg">发送验证码</el-button>
                     <span class="status">{{statusMsg}}</span>
                 </el-form-item>
@@ -48,6 +48,7 @@
     </div>
 </template>
 <script>
+import CryptoJS from 'crypto-js'
 export default {
     layout:'blank',
     data(){
@@ -68,9 +69,9 @@ export default {
                     message:'请输入昵称',
                     trigger:'blur'
                 }],
-                emial:[{
+                email:[{
                     required:true,
-                    type:'emial',
+                    type:'email',
                     message:'请输入邮箱',
                     trigger:'blur',
                 }],
@@ -96,40 +97,70 @@ export default {
     methods:{
         sendMsg(){
           const self = this;
-          let namePass
-          let emailPass
-          if (self.timerid) {
+            let namePass
+            let emailPass
+            if (self.timerid) {
             return false
-          }
-          this.$refs['form'].validateField('name', (valid) => {
+            }
+            this.$refs['form'].validateField('name', (valid) => {
             namePass = valid
-          })
-
-          if ( !namePass && !emailPass ) {
-            self.$axios.post('/users/verify', {
-              username:encodeURIComponent(self.form.name),
-              email:self.form.email
-            }).then(({
-              status,
-              data
-            }) => {
-              if ( status === 200 && data && data.code === 0) {
-                let count = 60;
-                self.statusMsg = `验证码已发送，剩余${count--}秒`
-                self.timerid = setInterval(function(){
-                  self.statusMsg = `验证码已发送，剩余${count--}秒`
-                  if (count === 0 ){
-                    clearInterval(self.timerid)
-                  }
-                },1000)
-              } else{
-                self.statusMsg = data.msg
-              }
             })
-          }
+            self.statusMsg = ''
+            if (namePass) {
+            return false
+            }
+            this.$refs['form'].validateField('email', (valid) => {
+            emailPass = valid
+            })
+            if (!namePass && !emailPass) {
+            self.$axios.post('/users/verify', {
+                username: encodeURIComponent(self.form.name),
+                email: self.form.email
+            }).then(({
+                status,
+                data
+            }) => {
+                if (status === 200 && data && data.code === 0) {
+                let count = 60;
+                self.statusMsg = `验证码已发送,剩余${count--}秒`
+                self.timerid = setInterval(function () {
+                    self.statusMsg = `验证码已发送,剩余${count--}秒`
+                    if (count === 0) {
+                    clearInterval(self.timerid)
+                    }
+                }, 1000)
+                } else {
+                self.statusMsg = data.msg
+                }
+            })
+            }
         },
         register(){
-
+            let self = this
+            this.$refs['form'].validate((valid)=>{
+                if(valid){
+                    self.$axios.post('/users/signup',{
+                        username:window.encodeURIComponent(self.form.name),
+                        //用md5加密，MD5处理后得到的是一个数组，需转换为字符串
+                        password:CryptoJS.MD5(self.form.pwd).toString(),
+                        email:self.form.email,
+                        code:self.form,code
+                    }).then(({status,data})=>{
+                        if(status ===200){
+                            if(data && data.code ===0){
+                                location.href = '/login'
+                            }else{
+                                self.error = data.msg
+                            }
+                        }else{
+                            self.error = `服务器出错，错误码：${status}`
+                        }
+                        setTimeout(function(){
+                            self.error = ''
+                        },1500)
+                    })
+                }
+            })
         }
     }
 }

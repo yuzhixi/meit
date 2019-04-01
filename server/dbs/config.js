@@ -20,7 +20,7 @@ export default {
         },
         //生成授权码
         get pass(){
-            return 'pljdmbpnorlfbdfd'
+            return 'mhblzdslfulpbcig'
         },
          //设置4位验证码
         get code(){
