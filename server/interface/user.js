@@ -12,7 +12,7 @@ let router = new Router({
 
 let Store = new Redis().client
 
-//注册
+//注册接口
 router.post('/signup',async (ctx)=>{
     const {
         username,
@@ -58,9 +58,9 @@ router.post('/signup',async (ctx)=>{
         return
     }
 
-    let nuser = await User.create({username,password,email})
+    let nuser = await User.create( { username,password,email } )
     if(nuser){
-        let res = await axios.post('/user/signin',{username,password})
+        let res = await axios.post('/user/signin',{username,password })
         if(res.data && res.data.code === 0){
             ctx.body = {
                 code:0,
