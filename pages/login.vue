@@ -62,6 +62,7 @@ export default {
           if(data&&data.code===0){
             location.href='/'
           }else{
+            console.log('error')
             self.error=data.msg
           }
         }else{

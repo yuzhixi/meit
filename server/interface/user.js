@@ -142,7 +142,10 @@ router.post('/verify', async (ctx, next) => {
 
 //退出
 router.get('/exit', async (ctx, next) => {
+  //注销
   await ctx.logout()
+  //验证是否为 未登录状态
+  //passport提供的api
   if ( !ctx.isAuthenticated() ) {
     ctx.body = {
       code: 0
@@ -150,6 +153,22 @@ router.get('/exit', async (ctx, next) => {
   } else {
     ctx.body = {
       code: -1
+    }
+  }
+})
+
+//获取用户信息
+router.get('/getUser', async (ctx) => {
+  if(ctx.isAuthenticated()){
+    const { username, email} = ctx.session.passport.user
+    ctx.body = {
+      user:username,
+      email:email
+    }
+  }else{
+    ctx.body = {
+      user:'',
+      user:''
     }
   }
 })

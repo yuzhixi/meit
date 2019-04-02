@@ -26,7 +26,7 @@ passport.serializeUser(function(user,done){
 })
 
 //反序列化,每次请求时在session中读取用户对象
-passport.deserializeUser(function(){
+passport.deserializeUser(function(user,done){
     done(null,user)
 })
 
