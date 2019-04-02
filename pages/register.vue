@@ -144,7 +144,7 @@ export default {
                         //用md5加密，MD5处理后得到的是一个数组，需转换为字符串
                         password:CryptoJS.MD5(self.form.pwd).toString(),
                         email:self.form.email,
-                        code:self.form,code
+                        code:self.form.code
                     }).then(({status,data})=>{
                         if(status ===200){
                             if(data && data.code ===0){
