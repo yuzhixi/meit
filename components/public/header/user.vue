@@ -23,6 +23,12 @@ export default {
     return {
       user: ''
     }
+  },
+  async mounted(){
+    const {status,data:{user}} = await this.$axios.get('/users/getuser')
+    if(status == 200) {
+      this.user = user
+    }
   }
 }
 </script>
