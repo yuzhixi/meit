@@ -144,9 +144,10 @@ router.post('/verify', async (ctx, next) => {
 router.get('/exit', async (ctx, next) => {
   //注销
   await ctx.logout()
+  debugger
   //验证是否为 未登录状态
   //passport提供的api
-  if ( !ctx.isAuthenticated() ) {
+  if (!ctx.isAuthenticated()) {
     ctx.body = {
       code: 0
     }
@@ -156,6 +157,7 @@ router.get('/exit', async (ctx, next) => {
     }
   }
 })
+
 
 //获取用户信息
 router.get('/getUser', async (ctx) => {
