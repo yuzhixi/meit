@@ -1,25 +1,31 @@
 import Router from 'koa-router'
-import axios from './utils/axios'
+// import axios from './utils/axios'
 import Province from '../dbs/models/province'
 
 let router = new Router({
   prefix:'/geo'
 })
 
-router.get('/getPosition', async (ctx) => {
-  let {status, data:{province,city}} = await axios.get('http://cp-tools.cn/geo/getPosition')
-  if(status === 200){
-    ctx.body = {
-      province,
-      city
-    }
-  } else {
-    ctx.body = {
-      province: '',
-      city: ''
-    }
-  }
-})
+// router.get('/getPosition', async (ctx) => {
+//   let {status, data:{province,city}} = {
+//     status:200,
+//     data: {
+//       province: '广东省',
+//       city: '深圳市'
+//     }
+//   }
+//   if(status === 200){
+//     ctx.body = {
+//       province,
+//       city
+//     }
+//   } else {
+//     ctx.body = {
+//       province: '',
+//       city: ''
+//     }
+//   }
+// })
 
 router.get('/province', async (ctx) => {
   let province = await Province.find()

@@ -12,6 +12,7 @@ import Redis from 'koa-redis'
 import json from 'koa-json'
 import dbConfig from './dbs/config'
 import passport from './interface/utils/passport.js'
+
 import user from './interface/user'
 import geo from './interface/geo'
 
