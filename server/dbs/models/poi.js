@@ -10,10 +10,10 @@ const Poi = new Schema({
   city:{
     type:String
   },
-  county:{
+  county:{  //区县
     type:String
   },
-  areaCode:{
+  areaCode:{  //区号
     type:String
   },
   tel:{

@@ -14,19 +14,19 @@
           <button class="el-button el-button--primary"><i class="el-icon-search"></i></button>
           <dl v-if="isHotPlace" class="hotPlace">
             <dt>热门搜索</dt>
-            <dd v-for="(x,index) in hotPlace" :key="index">{{x}}</dd>
+            <dd v-for="(x,index) in hotPlace" :key="index">{{x.name}}</dd>
           </dl>
           <dl v-if="isSearchList" class="searchList">
-            <dd v-for="(x,index) in searchList" :key="index">{{x}}</dd>
-            <dd>牛肉火锅</dd>
+            <dd v-for="(x,index) in searchList" :key="index">{{x.name}}</dd>
+            <!-- <dd>牛肉火锅</dd>
             <dd>羊肉火锅</dd>
-            <dd>老火锅</dd>
+            <dd>老火锅</dd> -->
           </dl>
         </div>
-        <p class="suggest">
-          <a href="#">故宫博物馆</a>
-          <a href="#">颐和园</a>
-          <a href="#">天安门</a>
+        <p class="suggest"
+           v-for="(x,index) in hotPlace" :key="index"
+        >
+          <a href="#">{{x.name}}</a>
         </p>
         <ul class="nav">
           <li><nuxt-link to="/" class="takeout">美团外卖</nuxt-link></li>
@@ -47,13 +47,15 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
+import { async } from 'q';
 export default {
   data(){
     return {
       search:'',
       isFocus:false,
-      hotPlace:['故宫博物馆','天安门','颐和园'],
-      searchList:['重庆火锅','鱼火锅','牛肉火锅']
+      // hotPlace:[],
+      searchList:[]
 
     }
   },
@@ -63,6 +65,9 @@ export default {
     },
     isSearchList:function(){
       return this.isFocus && this.search
+    },
+    hotPlace(){
+      return this.$store.state.home.hotPlace
     }
   },
   methods:{
@@ -75,9 +80,18 @@ export default {
         self.isFocus = false
       }, 200);
     },
-    input(){
-
-    }
+    input:_.debounce(async function(){
+      let self = this;
+      let city = this.$store.state.geo.position.city.replace('市','')
+      let {status,data:{top}} = await this.$axios.get('search/top', {
+        params: {
+          input:self.search,
+          city
+        }
+      })
+      this.searchList = top.slice(0,10)
+    },300)
+    
 
   }
 }

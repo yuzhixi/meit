@@ -10,7 +10,7 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-        <!-- <artistic></artistic> -->
+        <artistic></artistic>
       </el-col>
     </el-row>
   </div>
@@ -29,6 +29,6 @@ export default {
 }
 </script>
 <style lang="scss">
-// @import "assets/css/index/index.scss";
+@import "assets/css/index/index.scss";
 </style>
 

@@ -1,31 +1,32 @@
 import Router from 'koa-router'
-// import axios from './utils/axios'
 import Province from '../dbs/models/province'
+import Menu from '../dbs/models/menu'
+
 
 let router = new Router({
   prefix:'/geo'
 })
 
-// router.get('/getPosition', async (ctx) => {
-//   let {status, data:{province,city}} = {
-//     status:200,
-//     data: {
-//       province: '广东省',
-//       city: '深圳市'
-//     }
-//   }
-//   if(status === 200){
-//     ctx.body = {
-//       province,
-//       city
-//     }
-//   } else {
-//     ctx.body = {
-//       province: '',
-//       city: ''
-//     }
-//   }
-// })
+router.get('/getPosition', async (ctx) => {
+  let {status, data:{province,city}} = {
+    status:200,
+    data: {
+      province: '海南省',
+      city: '三亚市'
+    }
+  }
+  if(status === 200){
+    ctx.body = {
+      province,
+      city
+    }
+  } else {
+    ctx.body = {
+      province: '',
+      city: ''
+    }
+  }
+})
 
 router.get('/province', async (ctx) => {
   let province = await Province.find()
@@ -118,10 +119,33 @@ router.get('/hotCity', async (ctx) => {
 })
 
 router.get('/menu', async (ctx) => {
-  const result = await Menu.findOne()
+  // let city = await City.findOne({id: ctx.params.id})
+  let result = await Menu.findOne()
   ctx.body = {
-    menu: result.menu
+    menu:result.menu
   }
+  // Menu.found({},(err,doc) => {
+  //   if(err){
+  //     ctx.body = {
+  //       status:'1',
+  //       msg:err.msg
+  //     }
+  //   }else{
+  //     ctx.body = {
+  //       status:'0',
+  //       msg: '',
+  //       result: {
+  //         menu:doc
+  //       }
+  //     }
+  //   }
+  // })
+  
+  // const result = await Menu.findOne()
+  // ctx.body = {
+  //   menu: result
+  // }
+
   // let {status, data: {
   //     menu
   //   }} = await axios.get(`http://cp-tools.cn/geo/menu?sign=${sign}`);

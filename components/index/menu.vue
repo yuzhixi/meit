@@ -2,8 +2,7 @@
     <div class="m-menu">
         <dl class="nav" @mouseleave="mouseleave">
             <dt>全部分类</dt>
-            <dd v-for="(x,index) in menu" :key="index"
-                @mouseenter="enter"
+            <dd v-for="(x,index) in menu" :key="index"            @mouseenter="enter"
             >
                 <i :class="x.type"></i>{{x.name}}<span class="arrow"></span>
             </dd>
@@ -21,41 +20,44 @@ export default {
     data(){
         return {
             kind:'',
-            menu: [
-                {
-                    type:'food',
-                    name:'美食',
-                    child:[
-                        {
-                            title:'美食',
-                            child:['代金券','甜点饮品','小吃快餐']
-                        }
-                    ]
-                },
-                {
-                    type:'takeout',
-                    name:'外卖',
-                    child:[
-                        {
-                            title:'美食',
-                            child:['外卖券','午餐','下午茶']
-                        }
-                    ]
-                },
-                {
-                    type:'takeout',
-                    name:'外卖',
-                    child:[
-                        {
-                            title:'美食',
-                            child:['代金券','甜点饮品','小吃快餐']
-                        }
-                    ]
-                },
-            ]
+            // menu: [
+            //     {
+            //         type:'food',
+            //         name:'美食',
+            //         child:[
+            //             {
+            //                 title:'美食',
+            //                 child:['代金券','甜点饮品','小吃快餐']
+            //             }
+            //         ]
+            //     },
+            //     {
+            //         type:'takeout',
+            //         name:'外卖',
+            //         child:[
+            //             {
+            //                 title:'美食',
+            //                 child:['外卖券','午餐','下午茶']
+            //             }
+            //         ]
+            //     },
+            //     {
+            //         type:'takeout',
+            //         name:'外卖',
+            //         child:[
+            //             {
+            //                 title:'美食',
+            //                 child:['代金券','甜点饮品','小吃快餐']
+            //             }
+            //         ]
+            //     },
+            // ]
         }
     },
     computed:{
+        menu(){
+            return this.$store.state.home.menu
+        },
         curdetail(){
             return this.menu.filter((item)=>this.kind == item.type)[0]
         }

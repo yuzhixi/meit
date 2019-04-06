@@ -2,7 +2,7 @@
     <div class="m-life">
         <el-row>
             <el-col :span="14">
-                <!-- <slider/> -->
+                <slider/>
             </el-col>
             <el-col :span="4">
                 <div class="m-life-pic">
@@ -60,6 +60,6 @@ export default {
 </script>
 
 <style lang="scss">
-    // @import "assets/css/index/life.scss"
+    @import "assets/css/index/life.scss"
 </style>
 
