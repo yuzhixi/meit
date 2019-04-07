@@ -1,8 +1,6 @@
 import Router from 'koa-router'
-// import mongoose from 'mongoose'
 import Poi from '../dbs/models/poi'
 
-// mongoose.connect('mongodb://127.0.0.1:27017/student')
 let router = new Router({
     prefix:'/search'
 })
@@ -32,12 +30,13 @@ router.get('/top', async (ctx) => {
 })
 
 router.get('/hotPlace', async (ctx) => {
-    let city = ctx.store.state.geo.position.city
+    console.log('city', ctx.store, ctx.query)
+    let city = ctx.store ? ctx.store.geo.position.city : ctx.query.city
     try {
         let place = await Poi.find({
             city,
-            type: ctx.query.type || '景点'
-        }).limit(10)
+            type: ctx.query.type || '丽人'
+        }).limit(5)
         ctx.body = {
             code: 0,
             result: place.map(item => {
@@ -55,5 +54,9 @@ router.get('/hotPlace', async (ctx) => {
     }
     
 })
+
+router.get('/resultsByKeywords', async (ctx) => {
+
+} )
 
 export default router

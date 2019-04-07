@@ -14,7 +14,7 @@
           <button class="el-button el-button--primary"><i class="el-icon-search"></i></button>
           <dl v-if="isHotPlace" class="hotPlace">
             <dt>热门搜索</dt>
-            <dd v-for="(x,index) in hotPlace" :key="index">{{x.name}}</dd>
+            <dd v-for="(x,index) in $store.state.home.hotPlace" :key="index">{{x.name}}</dd>
           </dl>
           <dl v-if="isSearchList" class="searchList">
             <dd v-for="(x,index) in searchList" :key="index">{{x.name}}</dd>
@@ -23,10 +23,10 @@
             <dd>老火锅</dd> -->
           </dl>
         </div>
-        <p class="suggest"
-           v-for="(x,index) in hotPlace" :key="index"
-        >
-          <a href="#">{{x.name}}</a>
+        <p class="suggest">
+          <a href="#"
+             v-for="(x,index) in $store.state.home.hotPlace" :key="index"
+          >{{x.name}}</a>
         </p>
         <ul class="nav">
           <li><nuxt-link to="/" class="takeout">美团外卖</nuxt-link></li>
@@ -66,9 +66,13 @@ export default {
     isSearchList:function(){
       return this.isFocus && this.search
     },
-    hotPlace(){
-      return this.$store.state.home.hotPlace
-    }
+    // hotPlace(){
+    //   return this.$store.state.home.hotPlace
+    // }
+  },
+  mounted(){
+      console.log('hotPlace', this.$store.state.home.hotPlace)
+
   },
   methods:{
     focus(){
