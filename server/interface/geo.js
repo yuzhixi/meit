@@ -1,5 +1,6 @@
 import Router from 'koa-router'
 import Province from '../dbs/models/province'
+import City from '../dbs/models/city'
 import Menu from '../dbs/models/menu'
 
 
@@ -42,11 +43,14 @@ router.get('/province', async (ctx) => {
 
 router.get('/province/:id', async (ctx) => {
   let city = await City.findOne({id: ctx.params.id})
+  console.log('id', ctx.params.id)
 
   ctx.body = {
     code: 0,
     city: city.value.map(item => {
-      return {province: item.province, id: item.id, name: item.name}
+      return {province: item.province, id: item.id, name: item.name === '市辖区' || item.name === '省直辖县级行政区划'
+      ? item.province
+      : item.name}
     })
   }
   // let {status, data: {
@@ -140,7 +144,7 @@ router.get('/menu', async (ctx) => {
   //     }
   //   }
   // })
-  
+
   // const result = await Menu.findOne()
   // ctx.body = {
   //   menu: result
