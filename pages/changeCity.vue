@@ -11,18 +11,22 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24">3</el-col>
+      <el-col :span="24">
+        <category/>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
 import iSelect from '@/components/changeCity/iselect'
-import hots from '@/components/changeCity/hot'
+import Hots from '@/components/changeCity/hot'
+import Category from '@/components/changeCity/category'
 export default {
   components: {
     iSelect,
-    hots
+    Hots,
+    Category
   }
 }
 </script>

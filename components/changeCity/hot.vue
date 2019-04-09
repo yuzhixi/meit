@@ -2,7 +2,7 @@
   <div class="m-hcity">
     <dl>
       <dt>热门城市</dt>
-      <dd v-for="item in list" :key="item">{{item.name === '市辖区' || item.name === '省直辖县级行政区划'
+      <dd v-for="item in list" :key="item.id">{{item.name === '市辖区' || item.name === '省直辖县级行政区划'
           ? item.province
           : item.name}}</dd>
     </dl>
