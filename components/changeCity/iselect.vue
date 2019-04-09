@@ -43,7 +43,6 @@ export default {
     //监听省份来获取城市的数据
     pvalue: async function (newPvalue) {
       let self = this
-      console.log('newpvalue',newPvalue)
       let {status, data:{city}} = await  this.$axios.get(`/geo/province/${newPvalue}`)
       if(status == 200){
         self.city = city.map(item =>{
@@ -67,7 +66,6 @@ export default {
           label: item.name
         }
       })
-      console.log('province', this.province)
     }
   },
   methods: {
