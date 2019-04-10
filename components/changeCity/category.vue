@@ -45,13 +45,11 @@ export default {
             city:value
           })
         }
-        // this.block.sort(item => item.title)
     }
   }
 }
 </script>
 <style lang="scss">
-  // @import "assets/css/changeCity/hot.scss";
 
   @import "assets/css/changeCity/categroy.scss";
 </style>
