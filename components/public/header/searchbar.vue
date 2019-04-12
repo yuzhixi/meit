@@ -14,13 +14,14 @@
           <button class="el-button el-button--primary"><i class="el-icon-search"></i></button>
           <dl v-if="isHotPlace" class="hotPlace">
             <dt>热门搜索</dt>
-            <dd v-for="(x,index) in $store.state.home.hotPlace" :key="index">{{x.name}}</dd>
+            <dd v-for="(x,index) in $store.state.home.hotPlace" :key="index">
+              <a :href="'/products?keyword='+encodeURIComponent(x.name)">{{x.name}}</a>
+            </dd>
           </dl>
           <dl v-if="isSearchList" class="searchList">
-            <dd v-for="(x,index) in searchList" :key="index">{{x.name}}</dd>
-            <!-- <dd>牛肉火锅</dd>
-            <dd>羊肉火锅</dd>
-            <dd>老火锅</dd> -->
+            <dd v-for="(x,index) in searchList" :key="index">
+              <a :href="'/products?keyword='+encodeURIComponent(x.name)">{{x.name}}</a>
+            </dd>
           </dl>
         </div>
         <p class="suggest">
@@ -95,7 +96,7 @@ export default {
       })
       this.searchList = top.slice(0,10)
     },300)
-    
+
 
   }
 }

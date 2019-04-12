@@ -1,67 +1,85 @@
 <template>
-  <div
-    :id="id"
-    :style="{width:width+'px',height:height+'px',margin:'34px auto'}"
-    class="m-map"/>
+  <el-row class="page-product">
+    <el-col :span="19">
+      <crumbs :keyword="keyword"/>
+      <categroy
+        :types="types"
+        :areas="areas"/>
+      <list :list="list"/>
+    </el-col>
+    <el-col :span="5">
+      <amap
+        v-if="point.length"
+        :width="230"
+        :height="290"
+        :point="point"/>
+    </el-col>
+  </el-row>
+
 </template>
 
 <script>
+import Crumbs from '@/components/products/crumbs.vue'
+import Categroy from '@/components/products/category.vue'
+import List from '@/components/products/list.vue'
+import Amap from '@/components/public/map.vue'
 export default {
-  props: {
-    width: {
-      type:Number,
-      default:300
-    },
-    height: {
-      type:Number,
-      default:300
-    },
-    point: {
-      type:Array,
-      default(){
-        return [116.46,39.92]
+  components:{
+    Crumbs,
+    Categroy,
+    List,
+    Amap
+  },
+  data(){
+    return {
+      list:[],
+      types:[],
+      areas:[],
+      keyword:'',
+      point:[]
+    }
+  },
+  async asyncData(ctx){
+    let keyword = ctx.query.keyword
+    let city = ctx.store.state.geo.position.city
+    let {status,data:{count,pois}} = await ctx.$axios.get('/search/resultsByKeywords',{
+      params:{
+        keyword,
+        city
+      }
+    })
+    let {status:status2,data:{areas,types}} = await ctx.$axios.get('/categroy/crumbs',{
+      params:{
+        city
+      }
+    })
+    if(status===200&&count>0&&status2===200){
+      return {
+        list: pois.filter(item=>item.photos.length).map(item=>{
+          return {
+            type: item.type,
+            img: item.photos[0].url,
+            name: item.name,
+            comment: Math.floor(Math.random()*10000),
+            rate: Number(item.biz_ext.rating),
+            price: Number(item.biz_ext.cost),
+            scene: item.tag,
+            tel: item.tel,
+            status: '可订明日',
+            location: item.location,
+            module: item.type.split(';')[0]
+          }
+        }),
+        keyword,
+        areas: areas.filter(item=>item.type!=='').slice(0,5),
+        types: types.filter(item=>item.type!=='').slice(0,5),
+        point: (pois.find(item=>item.location).location||'').split(',')
       }
     }
-  },
-  data() {
-    return {
-      id: `map`,
-      key: '0dbc0dfd7c775f2a927174493eab8220'
-    }
-  },
-  watch: {
-    point: function (val, old) {
-      this.map.setCenter(val)
-      this.marker.setPosition(val)
-    }
-  },
-  mounted() {
-    let self = this
-    self.id = `map${Math.random().toString().slice(4, 6)}`
-
-    window.onmaploaded = () => {
-      let map = new window.AMap.Map(self.id, {
-        resizeEnable: true,
-        zoom: 11,
-        center: self.point
-      })
-      self.map = map
-      window.AMap.plugin('AMap.ToolBar', () => {
-        let toolbar = new window.AMap.ToolBar()
-        map.addControl(toolbar)
-        let marker = new window.AMap.Marker({
-          icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-          position: self.point
-        })
-        self.marker = marker
-        marker.setMap(map)
-      })
-    }
-    const url = `https://webapi.amap.com/maps?v=1.4.10&key=${self.key}&callback=onmaploaded`
-    let jsapi = document.createElement('script')
-    jsapi.charset = 'utf-8'
-    jsapi.src = url
-    document.head.appendChild(jsapi)
-  },
+  }
 }
 </script>
+
+<style lang="scss">
+  @import "@/assets/css/products/index.scss";
+</style>
