@@ -7,7 +7,7 @@
         v-for="(item,index) in types"
         :key="index"
       >
-        <iSelect/>
+        <iSelect :name='item.name' :list='item.list'/>
       </dd>
     </dl>
     <dl class="classic">

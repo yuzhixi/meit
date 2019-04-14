@@ -45,6 +45,7 @@ router.get('/hotPlace', async (ctx) => {
                 }
             })
         }
+        console.log('hotplace', ctx.body.result)
     } catch (e) {
         ctx.body = {
             code: -1,
@@ -55,7 +56,49 @@ router.get('/hotPlace', async (ctx) => {
 })
 
 router.get('/resultsByKeywords', async (ctx) => {
-
+  let result = await Poi.find({city: ctx.query.city.replace('市', '')})
+  if (result) {
+    ctx.body = {
+      count: 10,
+      pois: result
+    }
+  } else {
+    ctx.body = {
+      areas: [],
+      types: []
+    }
+  }
 } )
+
+// router.get('/products', async (ctx) => {
+//     let keyword = ctx.query.keyword || '旅游'
+//     let city = ctx.query.city || '北京'
+//     let {
+//       status,
+//       data: {
+//         product,
+//         more
+//       }
+//     } = await axios.get('http://cp-tools.cn/search/products', {
+//       params: {
+//         keyword,
+//         city,
+//         sign
+//       }
+//     })
+//     if (status === 200) {
+//       ctx.body = {
+//         product,
+//         more: ctx.isAuthenticated() ? more: [],
+//         login: ctx.isAuthenticated()
+//       }
+//     }else{
+//       ctx.body = {
+//         product: {},
+//         more: ctx.isAuthenticated() ? more: [],
+//         login: ctx.isAuthenticated()
+//       }
+//     }
+//   })
 
 export default router
