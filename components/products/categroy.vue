@@ -7,7 +7,7 @@
         v-for="(item,index) in types"
         :key="index"
       >
-        <iSelect :name='item.name' :list='item.list'/>
+        <ISelect :name='item.type' :list='item.module'/>
       </dd>
     </dl>
     <dl class="classic">
@@ -17,13 +17,13 @@
         v-for="(item,index) in areas"
         :key="index"
       >
-        <iSelect/>
+        <ISelect :name='item.type' :list='item.module'/>
       </dd>
     </dl>
   </div>
 </template>
 <script>
-import ISelect from '@/components/changeCity/iselect'
+import ISelect from './iselect'
 export default {
   components: {
     ISelect
@@ -41,6 +41,8 @@ export default {
         return []
       }
     }
+  },
+  mounted(){
   }
 }
 </script>

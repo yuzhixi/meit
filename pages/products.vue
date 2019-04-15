@@ -20,7 +20,7 @@
 
 <script>
 import Crumbs from '@/components/products/crumbs.vue'
-import Categroy from '@/components/products/category.vue'
+import Categroy from '@/components/products/categroy.vue'
 import List from '@/components/products/list.vue'
 import Amap from '@/components/public/map.vue'
 export default {
@@ -33,8 +33,8 @@ export default {
   data(){
     return {
       // list:[],
-      types:[],
-      areas:[],
+      // types:[],
+      // areas:[],
       // keyword:'',
       // point:[]
     }
@@ -48,14 +48,14 @@ export default {
         city
       }
     })
-    console.log('888', count, pois)
-    debugger
-    // let {status:status2,data:{areas,types}} = await ctx.$axios.get('/categroy/crumbs',{
-    //   params:{
-    //     city:''
-    //   }
-    // })
-    if(status===200&&count>0){
+    console.log('888', count)
+    let {status:status2,data:{areas,types}} = await ctx.$axios.get('/categroy/crumbs',{
+      params:{
+        city:'宜昌市'
+      }
+    })
+    if(status===200&&count>0&&status2==200){
+      console.log(111)
       return {
         list: pois.filter(item=>item.name).map(item=>{
           return {
@@ -72,8 +72,8 @@ export default {
           }
         }),
         keyword,
-        // areas: areas.filter(item=>item.type!=='').slice(0,5),
-        // types: types.filter(item=>item.type!=='').slice(0,5),
+        areas: areas.filter(item=>item.type!=='').slice(0,5),
+        types: types.filter(item=>item.type!=='').slice(0,5),
         point: ['','']
       }
     }

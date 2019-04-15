@@ -16,6 +16,7 @@ import passport from './interface/utils/passport.js'
 import user from './interface/user'
 import geo from './interface/geo'
 import search from './interface/search'
+import categroy from './interface/categroy'
 
 const app = new Koa()
 //设置key，启用代理，使用插件
@@ -59,6 +60,7 @@ async function start() {
   app.use(user.routes()).use(user.allowedMethods())
   app.use(geo.routes()).use(geo.allowedMethods())
   app.use(search.routes()).use(search.allowedMethods())
+  app.use(categroy.routes()).use(categroy.allowedMethods())
 
   app.use(ctx => {
     ctx.status = 200

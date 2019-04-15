@@ -52,7 +52,7 @@ export default {
   },
   computed:{
     canOrder:function(){
-      return this.list.filter(item=>item.photos.length).length
+      return this.list.filter(item=>item.name).length
     }
   },
   async asyncData(ctx){

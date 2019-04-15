@@ -1,24 +1,24 @@
 import Router from 'koa-router';
-import axios from './utils/axios'
-import Category from '../dbs/models/categroy'
+import Categroy from '../dbs/models/categroy'
 
 let router = new Router({
   prefix:'/categroy'
 })
-const sign = 'abcd';
 
 router.get('/crumbs', async (ctx) => {
-  debugger
-  let result = await Category.findOne({city: ctx.query.city.replace('市', '') || '宜昌'})
+  let result = await Categroy.findOne({city: ctx.query.city.replace('市', '') || '宜昌'})
+  console.log('999',ctx.query.city.replace('市', ''),result)
   if (result) {
     ctx.body = {
       areas: result.areas,
-      types: result.types
+      types: result.types,
+      msg: ''
     }
   } else {
     ctx.body = {
       areas: [],
-      types: []
+      types: [],
+      msg:'未取到对应城市'
     }
   }
 
@@ -35,5 +35,4 @@ router.get('/crumbs', async (ctx) => {
   // }
 })
 
-
-export default router;
+export default router

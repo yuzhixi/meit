@@ -1,19 +1,17 @@
 <template>
   <div class="m-product-select">
     <dl class="tab">
-      <dt>{{name}}
-        <i class="el-icon-arrow-down el-icon--right"></i>
-      </dt>
+      <dt>{{ name }}<i class="el-icon-arrow-down el-icon--right"/></dt>
       <dd>
-        <h3>{{name}}</h3>
+        <h3>{{ name }}</h3>
         <span
-          v-for="(item,index) in list"
-          :key="index"
-        >{{item}}</span>
+          v-for="(item,idx) in list"
+          :key="idx">{{ item }}</span>
       </dd>
     </dl>
   </div>
 </template>
+
 <script>
 export default {
   props: {
@@ -30,4 +28,3 @@ export default {
   }
 }
 </script>
-

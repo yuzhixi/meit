@@ -1,30 +1,27 @@
 <template>
-  <div class="m-product-list">
+  <div class="m-products-list">
     <dl>
       <dd
         v-for="item in nav"
         :key="item.name"
-        :class="[item.name, item.active?'s-nav-active':'']"
+        :class="[item.name,item.acitve?'s-nav-active':'']"
         @click="navSelect"
-      >
-        {{item.txt}}
-      </dd>
+      >{{ item.txt }}</dd>
     </dl>
     <ul>
       <Item
-        v-for="(item,index) in list"
-        :key="index"
-        :meta="item"
-      />
+        v-for="(item,idx) in list"
+        :key="idx"
+        :meta="item"/>
     </ul>
   </div>
 </template>
 
 <script>
-import item from './product'
+import Item from './product'
 export default {
   components: {
-    item
+    Item
   },
   props: {
     list: {
