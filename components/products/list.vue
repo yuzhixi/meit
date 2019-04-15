@@ -62,6 +62,9 @@ export default {
     navSelect: function () {
       console.log('select')
     }
+  },
+  mounted(){
+    console.log('product list', this.list)
   }
 }
 </script>

@@ -17,7 +17,7 @@
         <h3>商家团购及优惠</h3>
       </el-col>
     </el-row>
-    <el-row v-if="canOrder || !login">
+    <el-row v-if="!login || canOrder">
       <el-col :span="24">
         <list
           v-if="login"
@@ -52,18 +52,20 @@ export default {
   },
   computed:{
     canOrder:function(){
+      console.log('list', this.list)
       return this.list.filter(item=>item.name).length
     }
   },
   async asyncData(ctx){
-    let {keyword,type}=ctx.query;
-    let {status,data:{product,more:list,login}}=await ctx.$axios.get('/search/products',{
+    let {keyword,type,location}=ctx.query;
+    let {status,data:{product,list,login}}=await ctx.$axios.get('/search/products',{
       params:{
         keyword,
         type,
-        city:ctx.store.state.geo.position.city
+        location
       }
     })
+    console.log('list', list,'==')
     if(status===200){
       return {
         keyword,

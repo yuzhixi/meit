@@ -1,12 +1,11 @@
 <template>
   <li
-    v-if="meta.photos.length"
+    v-if="meta.name"
     class="m-detail-item">
     <dl class="section">
       <dd>
         <img
-          :src="meta.photos[0].url"
-          :alt="meta.photos[0].title">
+          src="">
       </dd>
       <dd>
         <h4>{{ meta.name }}</h4>

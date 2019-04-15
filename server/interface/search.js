@@ -71,31 +71,55 @@ router.get('/resultsByKeywords', async (ctx) => {
 } )
 
 router.get('/products', async (ctx) => {
-    let keyword = ctx.query.keyword || '旅游'
-    let city = ctx.query.city || '北京'
-    let {
-      status,
-      data: {
-        product,
-        more
-      }
-    } = await axios.get('http://cp-tools.cn/search/products', {
-      params: {
-        keyword,
-        city,
-        sign
-      }
-    })
-    if (status === 200) {
+    let keyword = ctx.query.keyword || '水云阁水疗养生休闲会所'
+    let location = ctx.query.location || ''
+    let type = ctx.query.type || ''
+    let list = [
+      {
+        name:'老北京火锅三人餐',
+        biz_ext:{
+          ticket_ordering:40,
+          cost:'158'
+        },
+        deadline:'2019-12-31',
+      },
+      {
+        name:'老北京火锅六人餐',
+        biz_ext:{
+          ticket_ordering:80,
+          cost:'358'
+        },
+        deadline:'2019-12-31',
+      },
+      {
+        name:'老北京火锅双人餐',
+        biz_ext:{
+          ticket_ordering:20,
+          cost:'118'
+        },
+        deadline:'2019-12-31',
+      },
+      {
+        name:'精品小火锅',
+        biz_ext:{
+          ticket_ordering:56,
+          cost:'98'
+        },
+        deadline:'2019-12-31',
+      },
+    ]
+    let product = await Poi.findOne({name:keyword,area:location,type:type})
+    if (product) {
+      console.log('ctxlist',list)
       ctx.body = {
         product,
-        more: ctx.isAuthenticated() ? more: [],
+        list: ctx.isAuthenticated() ? list: '',
         login: ctx.isAuthenticated()
       }
     }else{
       ctx.body = {
         product: {},
-        more: ctx.isAuthenticated() ? more: [],
+        list: ctx.isAuthenticated() ? list: '',
         login: ctx.isAuthenticated()
       }
     }

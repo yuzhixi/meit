@@ -2,17 +2,17 @@
   <dl class="m-sum-card">
     <dt>
       <h1>{{ meta.name }}</h1>
-      <el-rate
+      <!-- <el-rate
         v-model="rate"
-        disabled />
-      <span>{{ Number(meta.biz_ext.rating)||rate }}分</span>
-      <span>人均￥{{ Number(meta.biz_ext.cost) }}</span>
+        disabled /> -->
+      <span>4分</span>
+      <span>类型￥{{ meta.type }}</span>
       <ul>
-        <li @click="openMap(meta.location)">地址：{{ meta.address }}</li>
+        <li @click="openMap(meta.location)">地址：{{ meta.province }}{{ meta.city }}{{ meta.county }}{{ meta.area }}</li>
         <li>电话：{{ meta.tel }}</li>
       </ul>
     </dt>
-    <dd>
+    <!-- <dd>
       <el-carousel
         height="214px"
         indicator-position="none">
@@ -26,7 +26,7 @@
             height="100%"></h3>
         </el-carousel-item>
       </el-carousel>
-    </dd>
+    </dd> -->
   </dl>
 </template>
 
@@ -42,18 +42,18 @@ export default {
   },
   data() {
     return {
+      rate:'',
       sale: 70 + Math.floor(Math.random() * 300)
     }
   },
-  computed: {
-    rate: function () {
-      return Number(this.meta.biz_ext.rating) || Math.floor(Math.random() * 5)
-    }
-  },
+
   methods: {
     openMap: function (location) {
 
     }
+  },
+  mounted(){
+    console.log('00', this.meta)
   }
 }
 </script>
