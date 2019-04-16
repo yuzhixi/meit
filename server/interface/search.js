@@ -31,6 +31,7 @@ router.get('/top', async (ctx) => {
 
 router.get('/hotPlace', async (ctx) => {
     let city = ctx.store ? ctx.store.geo.position.city : ctx.query.city
+    console.log('hot', city,ctx.query.type)
     try {
         let place = await Poi.find({
             city,
