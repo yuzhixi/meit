@@ -30,11 +30,11 @@ router.get('/top', async (ctx) => {
 })
 
 router.get('/hotPlace', async (ctx) => {
-    let city = ctx.store ? ctx.store.geo.position.city : ctx.query.city
+    let city = ctx.store ? ctx.$store.state.geo.position.city : ctx.query.city
     console.log('hot', city,ctx.query.type)
     try {
         let place = await Poi.find({
-            city,
+            city:city.replace('市',''),
             type: ctx.query.type || '丽人'
         }).limit(5)
         ctx.body = {
@@ -111,7 +111,6 @@ router.get('/products', async (ctx) => {
     ]
     let product = await Poi.findOne({name:keyword,area:location,type:type})
     if (product) {
-      console.log('ctxlist',list)
       ctx.body = {
         product,
         list: ctx.isAuthenticated() ? list: '',

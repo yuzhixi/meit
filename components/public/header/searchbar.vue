@@ -25,9 +25,7 @@
           </dl>
         </div>
         <p class="suggest">
-          <a href="#"
-             v-for="(x,index) in $store.state.home.hotPlace" :key="index"
-          >{{x.name}}</a>
+          <a :href="'/products?keyword='+encodeURIComponent(x.name)" v-for="(x,index) in $store.state.home.hotPlace" :key="index">{{x.name}}</a>
         </p>
         <ul class="nav">
           <li><nuxt-link to="/" class="takeout">美团外卖</nuxt-link></li>

@@ -17,6 +17,7 @@ router.post('/signup', async (ctx) => {
   const {username, password, email, code} = ctx.request.body;
 
   if (code) {
+    //发送验证码时，已经在redis中保存了验证码和时间，此处则取出验证码和时间来做判断
     const saveCode = await Store.hget(`nodemail:${username}`, 'code')
     const saveExpire = await Store.hget(`nodemail:${username}`, 'expire')
     if (code === saveCode) {

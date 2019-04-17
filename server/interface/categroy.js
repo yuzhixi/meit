@@ -7,7 +7,6 @@ let router = new Router({
 
 router.get('/crumbs', async (ctx) => {
   let result = await Categroy.findOne({city: ctx.query.city.replace('市', '') || '宜昌'})
-  console.log('999',ctx.query.city.replace('市', ''),result)
   if (result) {
     ctx.body = {
       areas: result.areas,
