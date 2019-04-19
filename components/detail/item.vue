@@ -53,7 +53,6 @@ export default {
           detail: {
             name: self.meta.name,
             price: self.meta.biz_ext.cost,
-            imgs: self.meta.photos
           }
         }
       })

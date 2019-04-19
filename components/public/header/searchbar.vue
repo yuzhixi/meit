@@ -70,7 +70,6 @@ export default {
     // }
   },
   mounted(){
-      console.log('hotPlace', this.$store.state.home.hotPlace)
 
   },
   methods:{

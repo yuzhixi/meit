@@ -52,7 +52,6 @@ export default {
   },
   computed:{
     canOrder:function(){
-      console.log('list', this.list)
       return this.list.filter(item=>item.name).length
     }
   },
@@ -65,7 +64,6 @@ export default {
         location
       }
     })
-    console.log('list', list,'==')
     if(status===200){
       return {
         keyword,

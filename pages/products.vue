@@ -48,14 +48,12 @@ export default {
         city
       }
     })
-    console.log('888', count)
     let {status:status2,data:{areas,types}} = await ctx.$axios.get('/categroy/crumbs',{
       params:{
         city:'宜昌市'
       }
     })
     if(status===200&&count>0&&status2==200){
-      console.log(111)
       return {
         list: pois.filter(item=>item.name).map(item=>{
           return {

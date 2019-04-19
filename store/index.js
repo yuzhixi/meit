@@ -16,7 +16,6 @@ const store = () => new Vuex.Store({
         commit
     }, {req, app}) {
         const {status, data: {province, city}} = await app.$axios.get('/geo/getPosition')
-        console.log('city', province, city)
         commit('geo/setPosition',status===200?{city,province}:{city:'',province:''})
 
         const {status: status2, data:{menu}} = await app.$axios.get('/geo/menu')
