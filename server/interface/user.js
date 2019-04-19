@@ -1,8 +1,11 @@
 import Router from 'koa-router'
+//利用redis存储并匹配每个人的邮件验证码
 import Redis from 'koa-redis'
+//通过node程序给发送邮件
 import nodeMailer from 'nodemailer'
 import User from '../dbs/models/users'
 import Passport from './utils/passport'
+//smtp配置
 import Email from '../dbs/config'
 import axios from './utils/axios'
 
@@ -10,6 +13,7 @@ let router = new Router({
     prefix:'/users'
 })
 
+//获取redis客户端
 let Store = new Redis().client
 
 //注册接口
@@ -18,8 +22,10 @@ router.post('/signup', async (ctx) => {
 
   if (code) {
     //发送验证码时，已经在redis中保存了验证码和时间，此处则取出验证码和时间来做判断
+    //hget，哈希数据类型，nodemail前缀下获取用户名为当前username的code和过期时间expire
     const saveCode = await Store.hget(`nodemail:${username}`, 'code')
     const saveExpire = await Store.hget(`nodemail:${username}`, 'expire')
+    //将前端传过来的验证码和redis中取到的验证码做对比
     if (code === saveCode) {
       if (new Date().getTime() - saveExpire > 0) {
         ctx.body = {
@@ -48,8 +54,9 @@ router.post('/signup', async (ctx) => {
     }
     return
   }
-  let nuser = await User.create({username, password, email})
-  if (nuser) {
+
+  let newuser = await User.create({username, password, email})
+  if (newuser) {
     let res = await axios.post('/users/signin', {username, password})
     if (res.data && res.data.code === 0) {
       ctx.body = {
@@ -73,6 +80,7 @@ router.post('/signup', async (ctx) => {
 
 //登陆
 router.post('/signin', async (ctx,next)=>{
+  //Passport.authenticate('local')为中间件
   return Passport.authenticate('local',function(err,user,info,status){
     if(err){
       ctx.body = {
@@ -131,6 +139,7 @@ router.post('/verify', async (ctx, next) => {
     if (error) {
       return console.log(error)
     } else {
+      //hmset,哈希数据类型, 第一个参数为KEY名称,后面的参数为不固定参数,数据格式是 key,value ,key, value.设置验证码数据的前缀为nodemail
       Store.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email)
     }
   })
