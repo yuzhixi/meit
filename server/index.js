@@ -6,13 +6,13 @@ const { Nuxt, Builder } = require('nuxt')
 
 //导入中间件
 import mongoose from 'mongoose'
-import bodyParser from 'koa-bodyparser'
-import session from 'koa-generic-session'
+import bodyParser from 'koa-bodyparser'       //处理post请求的参数
+import session from 'koa-generic-session'     //操作session和cookie
 import Redis from 'koa-redis'
 import json from 'koa-json'
-import dbConfig from './dbs/config'
-import passport from './interface/utils/passport.js'
 
+import dbConfig from './dbs/config'     // 导入数据库相关配置
+import passport from './interface/utils/passport.js'
 import user from './interface/user'
 import geo from './interface/geo'
 import search from './interface/search'
@@ -23,13 +23,16 @@ const app = new Koa()
 //设置key，启用代理，使用插件
 app.keys = ['mt', 'keyskeys']
 app.proxy = true
+// 借助redis存储session，session是存储到cookie中，加前缀mt:uid方便识别
 app.use(session({key:'mt',prefix:'mt:uid',store:new Redis()}))
+// 拓展类型
 app.use(bodyParser({
   extendTypes:['json','form','text']
 }))
 app.use(json())
 //连接数据库
 mongoose.connect(dbConfig.dbs,{
+  // 使用URL字符串解析器
   useNewUrlParser:true
 })
 //处理登录相关配置
@@ -57,7 +60,7 @@ async function start() {
     await nuxt.ready()
   }
 
-  //引入路由，注意代码插入位置
+  //引入路由，注意代码插入位置，应在app.use(ctx..)之前引入
   app.use(user.routes()).use(user.allowedMethods())
   app.use(geo.routes()).use(geo.allowedMethods())
   app.use(search.routes()).use(search.allowedMethods())

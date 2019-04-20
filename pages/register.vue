@@ -48,7 +48,8 @@
     </div>
 </template>
 <script>
-import CryptoJS from 'crypto-js'
+import CryptoJS from 'crypto-js'  //加密包，有包含md5在内的多种加密方式
+import { timeout } from 'q';
 export default {
     layout:'blank',
     data(){
@@ -96,13 +97,16 @@ export default {
     },
     methods:{
         sendMsg(){
-            const self = this;
-            let namePass
-            let emailPass
+            const self = this
+            let namePass;
+            let emailPass;
             if (self.timerid) {
+                console.log('验证码已发送',self.timerid)
                 return false
             }
+            // 有返回值，则说明校验未通过，errorMsg
             this.$refs['form'].validateField('name', (valid) => {
+                debugger
                 namePass = valid
             })
             self.statusMsg = ''
@@ -114,34 +118,39 @@ export default {
             })
             if (!namePass && !emailPass) {
                 self.$axios.post('/users/verify', {
-                    username: encodeURIComponent(self.form.name),
+                    username: encodeURIComponent(self.form.name),   // 对中文进行编码
                     email: self.form.email
                 }).then(({
                     status,
                     data
                 }) => {
                     if (status === 200 && data && data.code === 0) {
-                    let count = 60;
-                    self.statusMsg = `验证码已发送,剩余${count--}秒`
-                    self.timerid = setInterval(function () {
-                        self.statusMsg = `验证码已发送,剩余${count--}秒`
-                        if (count === 0) {
+                        let count = 60;
+                        self.statusMsg = `验证码已发送,剩余${--count}秒`
                         clearInterval(self.timerid)
-                        }
-                    }, 1000)
+                        self.timerid = setInterval(function () {
+                            self.statusMsg = `验证码已发送,剩余${--count}秒`
+                            if (count === 0) {
+                                self.statusMsg = ``
+                                clearInterval(self.timerid)
+                                clearInterval(self.timerid)
+                                console.log('清除定时器')
+                            }
+                        }, 1000)
                     } else {
-                    self.statusMsg = data.msg
+                        self.statusMsg = data.msg
                     }
                 })
             }
         },
         register(){
             let self = this
+            debugger
             this.$refs['form'].validate((valid)=>{
                 if(valid){
                     self.$axios.post('/users/signup',{
                         username:window.encodeURIComponent(self.form.name),
-                        //用md5加密，MD5处理后得到的是一个数组，需转换为字符串
+                        //用md5加密，MD5（此处必须大写）处理后得到的是一个数组，需转换为字符串
                         password:CryptoJS.MD5(self.form.pwd).toString(),
                         email:self.form.email,
                         code:self.form.code
@@ -162,7 +171,11 @@ export default {
                 }
             })
         }
+    },
+    mounted(){
+
     }
+
 }
 </script>
 

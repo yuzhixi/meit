@@ -116,6 +116,8 @@ router.post('/verify', async (ctx, next) => {
     }
     return false
   }
+
+  // 开启一个 SMTP 连接池
   let transporter = nodeMailer.createTransport({
     service: 'qq',
     auth: {
@@ -123,26 +125,38 @@ router.post('/verify', async (ctx, next) => {
       pass: Email.smtp.pass
     }
   })
+
+  //设置发送内容code和接收方
   let ko = {
-    code: Email.smtp.code(),
-    expire: Email.smtp.expire(),
-    email: ctx.request.body.email,
-    user: ctx.request.body.username
+    code: Email.smtp.code(),// 验证码
+    expire: Email.smtp.expire(),// 过期时间
+    email: ctx.request.body.email,// 邮件接收方
+    user: ctx.request.body.username //当前发送方
   }
+
+  // 设置邮件内容
   let mailOptions = {
-    from: `"认证邮件" <${Email.smtp.user}>`,
+    from: `"认证邮件" <${Email.smtp.user}>`, //显示发送方
     to: ko.email,
     subject: 'to 路星河',
     html: `路星河先生，恭喜您被选中成为耿耿粉丝团最幸运的明日之星，耿耿会赐予你力量，为你争取offer的路上保驾护航，带您成功领取offer之日，还有惊喜大礼包哦，凭邀请码领取，您的邀请码是${ko.code}`
   }
+
+  // 发送邮件
   await transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       return console.log(error)
     } else {
+      // 成功就存储邮件数据
       //hmset,哈希数据类型, 第一个参数为KEY名称,后面的参数为不固定参数,数据格式是 key,value ,key, value.设置验证码数据的前缀为nodemail
-      Store.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email)
+      Store.hmset(`nodemail:${ko.user}`,
+        'code', ko.code,
+        'expire', ko.expire,
+        'email', ko.email
+        )
     }
   })
+
   ctx.body = {
     code: 0,
     msg: '验证码已发送，可能会有延时，有效期1分钟'
@@ -154,8 +168,7 @@ router.post('/verify', async (ctx, next) => {
 router.get('/exit', async (ctx, next) => {
   //注销
   await ctx.logout()
-  debugger
-  //验证是否为 未登录状态
+  //二次验证是否为登录状态
   //passport提供的api
   if (!ctx.isAuthenticated()) {
     ctx.body = {

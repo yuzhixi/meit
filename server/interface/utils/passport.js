@@ -21,11 +21,15 @@ passport.use(new LocalStrategy(async function(username,password,done){
 
 //让用户每次登陆都通过session验证
 //序列化，查询到用户后将用户存储到session中，保存user对象
+//在ctx.login(id)函数调用时触发，其中的参数会传给serializeUser函数作为其第一个参数
+//
 passport.serializeUser(function(user,done){
     done(null,user)
 })
 
 //反序列化,每次请求时在session中读取用户对象，删除user对象
+//会自动解析用户请求中session的信息，并作为回调函数的第一个参数
+//如果在serializeUser函数中将ID信息存入session，则在这一步回调函数的第一个参数就是ID，在此时可以根据ID查询数据库从而获取用户的更多信息
 passport.deserializeUser(function(user,done){
     done(null,user)
 })
