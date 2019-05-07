@@ -16,11 +16,11 @@ export default {
             return 'smtp.qq.com'
         },
         get user(){
-            return '1020503098@qq.com'
+            return '****'
         },
         //生成授权码
         get pass(){
-            return 'mhblzdslfulpbcig'
+            return '*****'
         },
          //设置4位验证码
         get code(){
